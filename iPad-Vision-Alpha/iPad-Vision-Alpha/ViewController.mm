@@ -38,6 +38,7 @@
     videoDataOutput = [AVCaptureVideoDataOutput new];
     NSDictionary *newSettings =
     @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA) };
+    //kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange works.
     videoDataOutput.videoSettings = newSettings;
     [videoDataOutput setAlwaysDiscardsLateVideoFrames:YES];
     
@@ -76,8 +77,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     UIImage *image = [self UIImageFromCVMat:frame];
     
-//    imageView.image = image;
-     [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:nil];
+    imageView.image = image;
+     [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation) 3 completionBlock:nil];
 }
 
 - (void)fromSampleBuffer:(CMSampleBufferRef)sampleBuffer
@@ -89,15 +90,18 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     CVPixelBufferLockBaseAddress(imgBuf, 0);
     
     // get the address to the image data
-    void *imgBufAddr = CVPixelBufferGetBaseAddress(imgBuf);
-    
+    void *imgBufAddr = CVPixelBufferGetBaseAddressOfPlane(imgBuf,0);
+    //void *imgBufAddr = CVPixelBufferGetBaseAddress(imgBuf);
     // get image properties
     int w = (int)CVPixelBufferGetWidth(imgBuf);
     int h = (int)CVPixelBufferGetHeight(imgBuf);
+    int bytesPerRow = (int)CVPixelBufferGetBytesPerRow(imgBuf);
+    int size = h * bytesPerRow;
+    
     
     // create the cv mat
     mat.create(h, w, CV_8UC4);
-    memcpy(mat.data, imgBufAddr, w * h);
+    memcpy(mat.data, imgBufAddr, size);
     
     // unlock again
     CVPixelBufferUnlockBaseAddress(imgBuf, 0);

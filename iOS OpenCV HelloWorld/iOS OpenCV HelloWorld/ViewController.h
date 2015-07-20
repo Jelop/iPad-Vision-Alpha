@@ -7,11 +7,14 @@
 //
 #import <opencv2/highgui/cap_ios.h>
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @interface ViewController : UIViewController<CvVideoCameraDelegate>
 
 @property IBOutlet UIImageView *imageView;
 @property IBOutlet UIButton *button;
+@property AVCaptureDevice *videoCaptureDevice;
 @property (nonatomic, retain) CvVideoCamera* videoCamera;
 @property (nonatomic) AVCaptureFocusMode focusMode;
 

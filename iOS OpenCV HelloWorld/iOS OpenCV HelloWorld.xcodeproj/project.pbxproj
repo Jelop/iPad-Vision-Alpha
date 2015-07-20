@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		748FEA941B293032001FC61C /* camera_params.xml in Resources */ = {isa = PBXBuildFile; fileRef = 748FEA931B293032001FC61C /* camera_params.xml */; };
+		425E84321B48E8BD005FD9BB /* params_0.7.xml in Resources */ = {isa = PBXBuildFile; fileRef = 425E84311B48E8BD005FD9BB /* params_0.7.xml */; };
+		425E84341B48EAC8005FD9BB /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425E84331B48EAC8005FD9BB /* opencv2.framework */; };
 		74919FAE1B268C4700A488C9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 74919FAD1B268C4700A488C9 /* main.m */; };
 		74919FB11B268C4700A488C9 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74919FB01B268C4700A488C9 /* AppDelegate.mm */; };
 		74919FB41B268C4700A488C9 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74919FB31B268C4700A488C9 /* ViewController.mm */; };
@@ -15,7 +16,6 @@
 		74919FB91B268C4700A488C9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74919FB81B268C4700A488C9 /* Images.xcassets */; };
 		74919FBC1B268C4700A488C9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74919FBA1B268C4700A488C9 /* LaunchScreen.xib */; };
 		74919FC81B268C4700A488C9 /* iOS_OpenCV_HelloWorldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74919FC71B268C4700A488C9 /* iOS_OpenCV_HelloWorldTests.m */; };
-		74F30C2B1B269A5600B37F21 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F30C2A1B269A5600B37F21 /* opencv2.framework */; };
 		74F30C2E1B26A20A00B37F21 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F30C2D1B26A20A00B37F21 /* Accelerate.framework */; };
 		74F30C301B26A21300B37F21 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F30C2F1B26A21300B37F21 /* AssetsLibrary.framework */; };
 		74F30C321B26A21B00B37F21 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F30C311B26A21B00B37F21 /* AVFoundation.framework */; };
@@ -39,7 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		748FEA931B293032001FC61C /* camera_params.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = camera_params.xml; path = ../../../490/camera_params.xml; sourceTree = "<group>"; };
+		425E84311B48E8BD005FD9BB /* params_0.7.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = params_0.7.xml; path = ../../0.7/0.7/params_0.7.xml; sourceTree = "<group>"; };
+		425E84331B48EAC8005FD9BB /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../../../Downloads/opencv2.framework; sourceTree = "<group>"; };
 		74919FA81B268C4600A488C9 /* iOS OpenCV HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS OpenCV HelloWorld.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		74919FAC1B268C4700A488C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74919FAD1B268C4700A488C9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -53,7 +54,6 @@
 		74919FC11B268C4700A488C9 /* iOS OpenCV HelloWorldTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iOS OpenCV HelloWorldTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		74919FC61B268C4700A488C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74919FC71B268C4700A488C9 /* iOS_OpenCV_HelloWorldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iOS_OpenCV_HelloWorldTests.m; sourceTree = "<group>"; };
-		74F30C2A1B269A5600B37F21 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../opencv2.framework; sourceTree = "<group>"; };
 		74F30C2C1B269AF700B37F21 /* iOS OpenCV HelloWorld.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iOS OpenCV HelloWorld.pch"; sourceTree = "<group>"; };
 		74F30C2D1B26A20A00B37F21 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		74F30C2F1B26A21300B37F21 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -72,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				425E84341B48EAC8005FD9BB /* opencv2.framework in Frameworks */,
 				74F30C3B1B26A24600B37F21 /* CoreImage.framework in Frameworks */,
 				74F30C3C1B26A24600B37F21 /* CoreMedia.framework in Frameworks */,
 				74F30C3D1B26A24600B37F21 /* CoreVideo.framework in Frameworks */,
@@ -82,7 +83,6 @@
 				74F30C321B26A21B00B37F21 /* AVFoundation.framework in Frameworks */,
 				74F30C301B26A21300B37F21 /* AssetsLibrary.framework in Frameworks */,
 				74F30C2E1B26A20A00B37F21 /* Accelerate.framework in Frameworks */,
-				74F30C2B1B269A5600B37F21 /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,7 +134,7 @@
 		74919FAB1B268C4700A488C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				748FEA931B293032001FC61C /* camera_params.xml */,
+				425E84311B48E8BD005FD9BB /* params_0.7.xml */,
 				74919FAC1B268C4700A488C9 /* Info.plist */,
 				74919FAD1B268C4700A488C9 /* main.m */,
 			);
@@ -161,6 +161,7 @@
 		74F30C411B26A25500B37F21 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				425E84331B48EAC8005FD9BB /* opencv2.framework */,
 				74F30C351B26A24600B37F21 /* CoreImage.framework */,
 				74F30C361B26A24600B37F21 /* CoreMedia.framework */,
 				74F30C371B26A24600B37F21 /* CoreVideo.framework */,
@@ -171,7 +172,6 @@
 				74F30C311B26A21B00B37F21 /* AVFoundation.framework */,
 				74F30C2F1B26A21300B37F21 /* AssetsLibrary.framework */,
 				74F30C2D1B26A20A00B37F21 /* Accelerate.framework */,
-				74F30C2A1B269A5600B37F21 /* opencv2.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -257,8 +257,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				748FEA941B293032001FC61C /* camera_params.xml in Resources */,
 				74919FB71B268C4700A488C9 /* Main.storyboard in Resources */,
+				425E84321B48E8BD005FD9BB /* params_0.7.xml in Resources */,
 				74919FBC1B268C4700A488C9 /* LaunchScreen.xib in Resources */,
 				74919FB91B268C4700A488C9 /* Images.xcassets in Resources */,
 			);
@@ -413,9 +413,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/localjosh/Desktop,
+					/Users/Joshua/Downloads,
 				);
 				INFOPLIST_FILE = "iOS OpenCV HelloWorld/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -431,9 +432,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/localjosh/Desktop,
+					/Users/Joshua/Downloads,
 				);
 				INFOPLIST_FILE = "iOS OpenCV HelloWorld/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

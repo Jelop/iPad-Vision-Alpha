@@ -14,7 +14,7 @@
 
 @interface ViewController : UIViewController <AVCaptureVideoDataOutputSampleBufferDelegate>
 
-@property IBOutlet UIView *view;
+//@property IBOutlet UIView *view;
 @property AVCaptureDevice *videoCaptureDevice;
 @property AVCaptureVideoDataOutput *videoDataOutput;
 @property IBOutlet UIImageView *imageView;
