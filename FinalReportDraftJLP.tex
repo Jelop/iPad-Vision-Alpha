@@ -125,6 +125,7 @@ In Figure 2, above, the fluorescent green and orange pieces have been superimpos
 
 \subsection{Augmented Reality}
 % Prior work and an overview of other applications and what exactly augmented reality is.
+The term 'Augmented Reality' refers to the concept of overlaying virtual data on the real world. It is a distinct concept from 'Virutal Reality' where the environment that you interact with is entirely digital. Augmented Reality, as the name implies, augments what already exists in the real world. In our case the image that is read from the iPad's camera is augmented with virtual puzzle pieces that you can see through the iPad's display. The localisation, as mentioned in the previous sections, allows us to render the pieces in such a way that the pieces appear as though part of the real world despite only existing digitally. This technique is the essence of an Augmented Reality application and is the reason that my (computer vision) element of the project exists. The reason the Giguesaur application makes use of Augmented Reality is because it is more engaging than a typical puzzle application, it is something interesting and different and prior to creating the Giguesaur application nothing quite like it existed. 
 
 
 \subsection{OpenCV}
@@ -133,6 +134,7 @@ OpenCV stands for Open Source Computer Vision and it is a software library that 
 
 \subsection{iOS vs Android}
 
+% Reference something to make it look more legitimate. 
 %could also mention other differences but i dont know what is relevant here
 iOS is the operating system used exclusively on Apple's mobile devices such as iPhones, iPads, and the iPod Touch, while Android is Google's open source operating system for use with mobile devices. The decision to create the Giguesaur application for iOS was decided on before I undertook the project, however the reasons for that decision are important. 
 
@@ -144,18 +146,23 @@ When developing a mobile application these differences between the respective op
 With all of this is mind, creating the Gigusaur application for iOS, rather than Android, was the only sensible choice. 
 
 
-\section{Achievements to Date}
+\section{Achievements}
 
 \subsection{Overview}
 
-My work on the Giguesaur project began by researching marker tracking as it was described in the project specification. I came across a variety of articles on the subject but of particular interest was the paper behind the ARToolkit \cite{artoolkit}, which is a widely used marker tracking package. I then began to use OpenCV as I would need image processing capabilites and followed that by learning about pose estimation and camera calibration, which are large components of my project. After implementing these processes I began to port my code to the iOS platform. 
+My work on the Giguesaur project began by researching marker tracking as it was described in the project specification. I came across a variety of articles on the subject but of particular interest was the paper behind the ARToolkit \cite{artoolkit}, which is a widely used marker tracking package. I then began to use OpenCV as I would need image processing capabilites and followed that by learning about pose estimation and camera calibration, which are large components of my project. After implementing these processes I began to port my code to the iOS platform. Once the porting to the iOS platform was complete the task became integration, which brought with it an new set of challenges. 
 
 %More detail here, Perhaps need to go into fine detail about how the pose estimation algorithm works. Perhaps start by describing what it does, finds a correspondence between real world and image space coordinates. 
 \subsection{Pose Estimation}
 
-Pose estimation is the name of the process which is used to locate a camera. It is the core process for my part of the Giguesaur project. A pose estimation algorithm has a number of requirements before its output can be calculated. \par
+Pose estimation is the name of the process which is used to locate a camera. It is the core process for my part of the Giguesaur project. Specifically such an algorithm uses the co-ordinates of points in the real world and the co-ordinates of the corresponding points in the image to define a relationship between these two systems. The idea is that once you have calculated the relationship between these two systems you can then find a real-world point's image-space location. This is necessary as the puzzle pieces' locations are defined in terms of our world-space co-ordinate system but are, of course, displayed on the iPad's screen. 
 
-The first thing required is that the camera you are locating must be calibrated. Camera calibration comprises a decent portion of the work I have done so far and the work I still have to do, so I will go into detail about it in the following section. \par
+%Talk about homography here?
+%The relationship between these two systems is called a 'homography', which is the name given to the mapping from one plane to another. 
+
+A pose estimation algorithm has a number of requirements before its output can be calculated. \par
+
+The first thing required is that the camera you are locating must be calibrated. Camera calibration comprises a decent portion of the work I have done, so I will go into detail about it in the following section. \par
 
 Secondly the algorithm requires a set of world-space coordinates. In our case this set of coordinates is all the internal corners of our checkerboard pattern. As the origin of our world-space coordinate system is one of the outermost internal corners and we know the side length of the squares we can then set up a nested for loop block where each loop increments by the square side length. Each iteration pushes a 2D vector comprising an x and y coordinate to an array. Note that the z coordinate can be excluded because our checkerboard is flat and so all the points are at z = 0. Once the nested for loop block has finished executing we have an array containing the coordinates of all the chessboard's internal corners. \par
 
@@ -163,7 +170,7 @@ The last requirement for a pose estimation algorithm is a way to find the points
 
 Once all of the above has been calculated then a pose estimation algorithm can be run with the arrays of points as input along with matrices related to camera calibration. The algorithm I use in this project is a OpenCV function called SolvePnP \cite{calib3}. Writing my own routine for such a task would be quite an undertaking and it is only one part of my piece of the project. The SolvePnP function then outputs two vectors, one for rotation and one for translation. These vectors together describe the location of the camera relative to the checkerboard. \par
 
-The rotation and translation vectors can be used to transform points in world-space to points in image-space and vice versa. So we can take points defined in world-space and transform them using these vectors in order to render them in the correct position in image-space. OpenCV provides a function that projects points in world-space to points in image-space. This function takes the vectors as input along with a set of world-space coordinates and returns an array of image-space coordinates. I have used this function as a proof of concept to ensure that my all of my work up to this point is correct and have superimposed a wire frame cube onto the checkerboard, which you can see below in Figure 3.
+The rotation and translation vectors can be used to transform points in world-space to points in image-space and vice versa. So we can take points defined in world-space and transform them using these vectors in order to render them in the correct position in image-space. OpenCV provides a function that projects points in world-space to points in image-space. This function takes the vectors as input along with a set of world-space coordinates and returns an array of image-space coordinates. I have used this function to superimpose a wire frame cube onto the checkerboard, which you can see below in Figure 3.
 
 
 \begin{figure}[H]
@@ -192,23 +199,50 @@ Together these camera characteristics and distortion measurements are known as t
 
 I use OpenCV for my camera calibration routine which is based on the calibration technique developed by Zhang \cite{zhang}. I start by taking a number of photos, from different angles, of a calibration pattern \cite{calib2}. Camera calibration routines make use of a few common patterns with easily detectable features, one such pattern is a checkerboard. So in our case the checkerboard is both the game board / tracking marker and calibration pattern. The ideal number of photos is around 15-20, a value I found by experimenting. Fewer than 15 and the pose estimation begins to become erratic, resulting in distorted augmented reality models. I then create a list of those images in XML format with a small program found on the OpenCV Github page \cite{opencvGit}. Once the image list has been generated and the parameters of the calibration defined in a separate XML file I run the full calibration program provided on the OpenCV Github. The result of this calibration procedure is an XML file containing a “Camera Matrix”, which is a 3$\times$3 matrix describing the camera's characteristics as mentioned above, and a “Distortion Coefficients” matrix, which is a 5$\times$1 matrix describing measures of various forms of distortion. These matrices are parsed by my program to be used by the pose estimation function. 
 
+The camera's characteristics and distortion must be modelled  because an image from a camera does not accurately represent the real world. The characteristics of the camera, as mentioned above, and the various forms of distortion introduced by the use of the lens cause an image produced by the camera to distorted in various ways. For example, straight lines in the real world do not appear straight in the captured image. So using the calculated characteristics and distortion measures when performing image processing allows you to account for these inaccuracies and thus obtain a more accurate result. 
 
-\subsection{iOS Development and Difficulties}
 
-Making our application compatible with iOS is a huge portion of the project because, as you might imagine, carrying a computer around to solve a puzzle is not all that practical. Once I had an augmented reality prototype working correctly I began to port my existing code over to the iOS platform. \par
+\subsection{Porting to iOS}
+
+Making our application compatible with iOS was a huge portion of the project because, as you might imagine, carrying a computer around to solve a puzzle is not all that practical. Once I had an augmented reality prototype working correctly I began to port my existing code over to the iOS platform. \par
 
 Developing for iOS is different from developing for a regular computer. Code that works on a regular iMac will not work on an iOS device without modification and the use of different APIs is usually required. As my code makes heavy use of OpenCV functions I had to use the OpenCV framework for iOS, and this proved to be a more complicated exercise than I had anticipated. \par
 
 For example, retrieving a frame from the camera on the iMac requires very little code to achieve. It is simply a matter of declaring a VideoCapture object and a matrix to store the pixel values and then the use of a single command to load from that VideoCapture object into that matrix. In iOS the same process requires a number of initialisation steps in order to begin using the camera. This includes things like setting the video stream quality, orientation, and which camera to use. \par
 
+\subsubsection{Camera Setup and Calibration}
+
 I began my work with iOS by attempting to retrieve a frame from the iPad's camera. The first thing I tried was using the CVVideoCamera library that comes packaged with the OpenCV framework for iOS. I was able to get a frame from the camera and process it before displaying it on the iPad's screen without much difficulty. However when I attempted to complete more complex tasks problems began to appear \cite{iOS}. \par
 
 The iPad's camera, unlike my iMac's built in camera, has an auto-focussing lens. When a scene is viewed the lens automatically adjusts to bring the scene into the sharpest focus possible. This turned out to be a large problem as the intrinsic parameters of the camera are only useful for a given focus setting and all of the calibration images must me taken at the same focus setting. As the lens was automatically focussing when I took the calibration images the process was flawed even at that stage. \par
 
-In order to overcome this problem, more information is required. I needed to be able to get and set some value that represents the lens position \cite{xamarin} then hopefully I could take an adequate set of calibration images and calculate the camera's intrinsic parameters for that value. The plan is to calculate the camera's intrinsic parameters for a variety of focus settings and, when the app is operating, measure the focus setting and then set it to the nearest value with stored intrinsic parameters. This need for more information lead to the use of Apple's AVFoundation framework \cite{apple_class}, which is a more complex but flexible framework for using the iPad's camera. I have successfully used this framework to set the focus value and take a set of calibration images, however I am unable to ascertain if the calculated intrinsic parameters are accurate as I have yet to implement a reliable augmented reality program on iOS. \par
+In order to overcome this problem, more information was required. I needed to be able to get and set some value that represents the lens position \cite{xamarin} then hopefully I could take an adequate set of calibration images and calculate the camera's intrinsic parameters for that value. My initial plan was to calculate the camera's intrinsic parameters for a variety of focus settings and, when the app is operating, measure the focus setting and then set it to the nearest value with stored intrinsic parameters. This need for more information lead to the use of Apple's AVFoundation framework \cite{apple_class}, which is a more complex but flexible framework for using the iPad's camera. 
+
+I swapped the video framework I was utilising from OpenCV's CVVideoCamera to Apple's AVFoundation. Initially this was not a particularly painful process with AVFoundation requiring slightly more boiler plate code to initialise but giving more freedom in return. From what I read in the little documentation I could find on it CVVideoCamera was built upon the AVFoundation Framework anyway. After initialising a number of various video input and output objects of Apple's design I was ready to test my aforementioned plan regarding calibration. 
+
+I succeeded in using the framework to perform an experiment on several focal settings, the focal setting being a number in the range 0-1. I wrote a small program that when the iPad's screen is pressed it would take a picture at a focal setting and then increment the focal setting by 0.1, this increment would take place only twice before the focal was reset to the original value. The initial value for the focal setting was chosen to be 0.7. The reason for this seemingly arbitrary value is that when the camera was set to 0.7 the image from the camera looks fairly in focus in all cases except for when the camera is very close to some real world object. The reason for the focal increment only occuring twice before reset is that I only wanted a small set of data to consider and then based on my findings I could gather more data if necessary. \par
+
+Using this program I took 3 pictures, one for each focal setting 0.7-0.9, of 20 different views of the checkerboard. I then fed each of these sets of images into the camera calibration routine to calculate the camera matrix and distortion coefficients matrix. 
+
+
+
+\subsubsection{Image Handling}
 
 The major difficulty in using the AVFoundation framework comes in processing an image and then displaying it to the screen as the video feed is displayed directly to the screen by way of a preview layer. Displaying the camera frame that I have processed is not an obvious task and is an ongoing problem. I am currently attempting to convert from the format Apple stores the camera frames in to an OpenCV Mat matrix in order to process the image but it is proving to be rather difficult \cite{stack}. Once I can successfully do that then I can check the calculated intrinsic parameters for accuracy. \par
 
+
+\subsection{Integration}
+
+
+
+
+\section{Results}
+
+%Screenshots and talk about how the final version of the app operates. Its successes and failures
+
+\section{Discussion}
+
+%Discuss those successes and failures and relate them back to aims and objectives. 
 
 \section{Limitations and Future Work}
 
