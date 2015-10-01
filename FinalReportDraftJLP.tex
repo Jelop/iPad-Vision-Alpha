@@ -296,16 +296,14 @@ In particular, the localisation works correctly although it is not yet fast enou
 
 \section{Discussion and Future Work}
 %Discuss those successes and failures and relate them back to aims and objectives. 
+I didn't achieve everything that I had planned when I began work on the Giguesaur project. Initially my goal was to test a variety of different marker tracking techniques before choosing the best one and integrating it into the main application. In reality just getting some kind of marker tracking to work took much longer than expected. So rather than spend more time finding the optimal solution I decided to work with what I already had. This meant using the checkerboard pattern as a marker and OpenCV's function for locating its internal corners. 
 
+When the project was much further along I discovered that the function for finding those corners is rather complex and takes approximately a fifth of a second to execute. This is the main reason that the application runs at around five frames per second. By this time it was far too late to change from OpenCV to some other marker tracking package so I decided to create my own marker tracking algorithm. I started programming a routine that would locate the centre of coloured blobs and return the coordinates. I would then use these coordinates as my image space points in the pose estimation algorithm. However I ran out of time and so the blob finder doesn't yet work with real camera input. 
 
-% Talk about using opencv and how average it was. 
+My final objective for the Giguesuar project was to implement marker tracking that could handle the marker being obscured from view. Currently if the chessboard pattern has any of its internal corners covered the function that finds the corners won't return anything. There has been some research on the topic of partial marker occlusion \cite{occlusion} and I would have liked to be able to implement a similar system. Allowing for marker occlusion would make the application much more robust in a real environment.
 
-% How to correct failures mentioned in discussion
-\begin{comment}
-The main limitation of my current implementation of camera localisation is the use of the findChessboardCorners function to locate the relevant features in an image. This function is subject to the limitation that the whole chessboard pattern must be in view of the camera or none of the internal corners' image-space coordinates are given. Without those image-space coordinates the pose estimation algorithm cannot be executed and therefore the camera's location cannot be determined. This effectively limits the puzzle to being played on a tabletop without anyone obscuring the board from another player's iPad, which is at odds with our vision of how the game should be played.
+If I was to start over on the Giguesaur project I think I would have chosen a different method for the marker tracking. OpenCV is a rather large library that is used for many different purposes and I think this diversity makes it less capable with specific tasks. If I had used a specially made marker tracking package such as the ARToolKit I think I might have achieved a more satisfactory result. 
 
-It would be nice to develop a marker tracking system that doesn't require that the whole marker (or all markers) be in view at one time, and if at all possible allow for a marker to be partially obscured without loss of camera location. There has been some research on the topic of partial marker occlusion \cite{occlusion} and I would like to be able to implement a similar system. 
-\end{comment}
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY - Check references. 
