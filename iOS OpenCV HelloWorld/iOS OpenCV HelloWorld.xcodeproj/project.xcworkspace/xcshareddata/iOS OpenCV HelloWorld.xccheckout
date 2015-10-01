@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>E42D2AB6-D07B-4564-B4AE-5CAB93B3A83B</string>
 	<key>IDESourceControlProjectName</key>
-	<string>iOS OpenCV HelloWorld</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>C8039D808D1FFB97590DAABE599A1BA598371F84</key>
 		<string>https://github.com/Jelop/iPad-Vision-Alpha.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>iOS OpenCV HelloWorld/iOS OpenCV HelloWorld.xcodeproj</string>
+	<string>iOS OpenCV HelloWorld/iOS OpenCV HelloWorld.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>C8039D808D1FFB97590DAABE599A1BA598371F84</key>

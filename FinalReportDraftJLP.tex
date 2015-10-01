@@ -13,6 +13,7 @@
 \usepackage{url}
 %\usepackage{biblatex}
 \usepackage{tocloft}
+\usepackage{verbatim}
 %\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 
 \geometry {a4paper, left = 30mm}
@@ -87,7 +88,7 @@ Our vision for our completed Giguesaur application was allowing a classroom of c
 
 \subsection{App Overview}
 
-The aim of the Giguesaur project was to create an iPad application that allows a group of people to collaboratively solve a jigsaw puzzle that is rendered using augmented reality. The virtual jigsaw is assembled on a playing area in the real world. This `game board' is decorated with physical markers which can be tracked using the iPad's camera and the feed from the camera is displayed on the iPad's screen for the user to see. The puzzle's pieces are rendered on the screen in such a way that they appear as though they are in the real world; they look as if superimposed upon the physical game board. The user is able to interact with the puzzle pieces through a user interface on the iPad. Using touch gestures the user can pick up and place pieces down on the board in their desired location. Finally, a large portion of the project was to implement networking so that multiple users are able to collaborate to solve a shared puzzle. 
+The aim of the Giguesaur project was to create an iPad application that allows a group of people to collaboratively solve a jigsaw puzzle that is rendered using augmented reality. The virtual jigsaw is assembled on a playing area in the real world. This `game board' is decorated with physical markers which can be tracked using the iPad's camera and the feed from the camera is displayed on the iPad's screen for the user to see. The puzzle's pieces are rendered on the screen in such a way that they appear as though they are in the real world; they look as if superimposed upon the physical game board. The user is able to interact with the puzzle pieces through a user interface on the iPad. Using touch gestures the user can pick up and place pieces down on the board in their desired location. Finally, a large portion of the project was to implement networking so that multiple users are able to collaborate to solve a shared puzzle. %Perhaps reference the augmented reality section. 
 
 \subsection{Project Format}
 
@@ -97,7 +98,7 @@ Development of the Giguesaur application was a fairly large task, the scope of w
 \section{Background}
 \subsection{What is Localisation}
 
-Localisation is the task of locating the iPad's camera relative to some real world object. As mentioned above our application makes use of a physical game board that is tracked with the camera. The current board is a 7$\times$10 checkerboard pattern and using that game board (or tracking marker), we define a real world coordinate system in millimetres. This real world coordinate system is tied to the physical board's position. So a particular point on the board (one of the outermost internal corners) is the origin of our real world coordinate system and as we know the dimensions of the squares of the checkerboard we can easily describe other points. \par
+Localisation is the task of locating the iPad's camera relative to some real world object. As mentioned above, our application makes use of a physical game board that is tracked with the camera. The current board is a 7$\times$10 checkerboard pattern and using that game board (or tracking marker), we define a real world coordinate system in millimetres. This real world coordinate system is tied to the physical board's position. So a particular point on the board (one of the outermost internal corners) is the origin of our real world coordinate system and as we know the dimensions of the squares of the checkerboard we can easily describe other points. \par
 
 Now that we have a real world coordinate system in place we can describe the location of the camera in relation to it (See Figure 1). This position is described by a translation and a rotation vector. These vectors give the camera's translation and change in orientation relative to the origin of our real world coordinate system.\par 
 
@@ -148,6 +149,8 @@ When developing a mobile application these differences between the respective op
 With all of this is mind, creating the Gigusaur application for iOS, rather than Android, was the only sensible choice. 
 
 \subsection{Apple and Xcode}
+
+Note to supervisors: This is a work in progress
 
 Working with iOS requires the use of mac etc...
 
@@ -225,16 +228,17 @@ The iPad's camera, unlike my iMac's built in camera, has an auto-focussing lens.
 
 In order to overcome this problem, more information was required. I needed to be able to get and set some value that represents the lens position \cite{xamarin} then hopefully I could take an adequate set of calibration images and calculate the camera's intrinsic parameters for that value. My initial plan was to calculate the camera's intrinsic parameters for a variety of focus settings and, when the app is operating, measure the focus setting and then set it to the nearest value with stored intrinsic parameters. This need for more information lead to the use of Apple's AVFoundation framework \cite{apple_class}, which is a more complex but flexible framework for using the iPad's camera. 
 
-I swapped the video framework I was utilising from OpenCV's CVVideoCamera to Apple's AVFoundation. Initially this was not a particularly painful process with AVFoundation requiring slightly more boiler plate code to initialise but giving more freedom in return. From what I read in the little documentation I could find on it CVVideoCamera was built upon the AVFoundation Framework anyway. After initialising a number of various video input and output objects of Apple's design I was ready to test my aforementioned plan regarding calibration. 
+I swapped the video framework I was utilising from OpenCV's CVVideoCamera to Apple's AVFoundation. Initially this was not a particularly painful process with AVFoundation requiring slightly more 'boiler plate' code to initialise but giving more freedom in return. From what I read, in the little documentation I could find on it, CVVideoCamera was built upon the AVFoundation Framework anyway. After initialising a number of various video input and output objects of Apple's design I was ready to test my aforementioned plan regarding calibration. 
 
 I succeeded in using the framework to perform an experiment on several focal settings, the focal setting being a number in the range 0-1. I wrote a small program that when the iPad's screen is pressed it would take a picture at a focal setting and then increment the focal setting by 0.1, this increment would take place only twice before the focal setting was reset to the original value. The initial value for the focal setting was chosen to be 0.7. The reason for this seemingly arbitrary value is that when the camera was set to 0.7 the image from the camera looks fairly in focus in all cases except for when the camera is very close to some real world object. The reason for the focal increment only occuring twice before reset is that I only wanted a small set of data to consider and then based on my findings I could gather more data if necessary. \par
 
-Using this program I took 3 pictures, one for each focal setting 0.7-0.9, of 20 different views of the checkerboard. I then fed each of these sets of images into the camera calibration routine to calculate the camera matrix and distortion coefficients matrix for each focal setting. I was hoping that I could identify some simple relationship between the focal setting and the camera and distortion coefficients matrices based on the data I had collected. While each of the camera matrices was the same at each focal setting the distortion coefficients matrix was different and I was unable to model the these differences. I then thought about following through with the plan I discussed above by calculating matrices for a variety of setttings and changing between them depending on the measured focal value. However this soon turned out to be more trouble than it was worth and I decided on a fixed focal setting of 0.7 which looks reasonably focussed at most distances.
+Using this program I took 3 pictures, one for each focal setting 0.7-0.9, of 20 different views of the checkerboard. I then fed each of these sets of images into the camera calibration routine to calculate the camera matrix and distortion coefficients matrix for each focal setting. I was hoping that I could identify some simple relationship between the focal setting and the camera and distortion coefficients matrices based on the data I had collected. While each of the camera matrices was the same at each focal setting the distortion coefficients matrix was different and I was unable to model these differences. I then thought about following through with the plan I discussed above by calculating matrices for a variety of setttings and changing between them depending on the measured focal value. However this soon turned out to be more trouble than it was worth and I decided on a fixed focal setting of 0.7 which looks reasonably focussed at most distances.
 
 
 \subsubsection{Image Handling}
 
-One of the major difficulties in using the AVFoundation framework comes in processing an image and then displaying it to the screen. Displaying the video feed to the iPad's screen is trivial and is done via what Apple calls a `Preview Layer'. I expect that this is a trivial task because this sort of functionality is likely what most users of the framework would be seeking and so the framework was designed with this in mind. If you wish to process a frame and then display it the task becomes much more difficult. When utilising the `Preview Layer' the video feed gets displayed directly to the iPad's screen and each frame is stored in a buffer for processing that is separate from the main thread of execution. Any attempt I made to remove the `Preview Layer' and set the current view to the last recieved frame resulted in the camera feed closing. I was still working on this problem when the decision was made to start integrating each part of the project into one application.
+One of the major difficulties in using the AVFoundation framework comes in processing an image and then displaying it to the screen. Displaying the video feed to the iPad's screen is trivial and is done via what Apple calls a `Preview Layer'. I expect that this is a trivial task because this sort of functionality is likely what most users of the framework would be seeking and so the framework was designed with this in mind. If you wish to process a frame and then display it the task becomes much more difficult. When utilising the `Preview Layer' the video feed gets displayed directly to the iPad's screen and each frame is stored in a buffer for processing that is separate from the main thread of execution. %That is accessible only from a separate thread of execution?
+ Any attempt I made to remove the `Preview Layer' and set the current view to the last recieved frame resulted in the camera feed closing. I was still working on this problem when the decision was made to start integrating each part of the project into one application.
 
 Another issue with the AVFoundation framework is that the buffer where incoming camera frames are stored is of a particular type called a `CMSampleBuffer'. There was no simple conversion from the sample buffer to an OpenCV Matrix, which I required in order to utilise the various OpenCV functions. After researching the problem I discovered that Apple's frameworks provide functions that return various pieces of information about the size and format of a given buffer. Using some source code I found that performed a similar function %source needed here
 I managed to convert the `CMSampleBuffer' to an OpenCV Matrix upon which I could utilise OpenCV functions for processing the image.
@@ -254,60 +258,57 @@ Once we had integrated the code into a compilable project we could continue work
 
 
 
-% Talk about how I use the camera here to track the checkerboard and perform pose estimation.
-
-
+% Talk about how I use the camera here to track the checkerboard and perform pose estimation. Maybe? Likely need a play by play of app execution somewhere?
 
 %preview layer caeagLayer etc.. opencv mat to uiimage for opengl  
 As I mentioned above, displaying a processed camera frame to the screen was a non trivial problem that was temporarily put to one side while we built a joint compilable project. Ashley's game logic and interface had progressed to the point of having a working jigsaw puzzle that was rendered with OpenGL and displayed to the screen, with pieces that could be interacted with using touch gestures. So the next step was to combine Ashley's game and interface with my computer vision component, this meant having the video feed as a background and rendering the pieces in the correct perspective relative to the game board. 
 
-In order to combine our two components we first had to figure out how to render the puzzle pieces on top of the video feed from the iPad's camera. As I mentioned earlier the video feed from the iPad's camera could be displayed to the screen using a `Preview Layer'. So we researched how to render on top of a layer based on the assumption that if the video feed was a `Preview Layer' then we could render the puzzle pieces on a different layer and place that layer over top of the video feed. We discovered that this was supposedly possible and set about implementing it. However we could not get it to work, either we could display the pieces with a block colour background or we could have the video feed but not both at the same time. After struggling with this approach we decided to try another way.
+In order to combine our two components we first had to figure out how to render the puzzle pieces on top of the video feed from the iPad's camera. As I mentioned earlier the video feed from the iPad's camera could be displayed to the screen using a `Preview Layer'. So we researched how to render on top of a layer based on the assumption that if the video feed was a `Preview Layer' then we could render the puzzle pieces on a different layer and place that layer on top of the video feed. We discovered that this was supposedly possible and set about implementing it. However we could not get it to work, either we could display the pieces with a block colour background or we could have the video feed but not both at the same time. After struggling with this approach we decided to try another way.
 
 Ashley had a method for displaying a background image on the screen upon which to render the puzzle pieces, so we reasoned that we could pass the frame from the camera to the background image rendering code and this would result in the video feed being displayed to the screen. This involved a few image format conversions as well as an extra method.
-Each frame from the iPad's camera is stored in a CMSampleBuffer and a method operating in a separate thread is executed whenever that buffer is written to. Within that method the image was converted to an OpenCV matrix so that the pose estimation function could give us the rotation and translation vectors required to render the puzzle pieces in the correct perspective. After that the image was converted to a UIImage for compatibility with Ashley's code and an auxiliary method in the game logic code was called and sent the UIImage. This auxiliary method was necessary as the buffer method operates in a separate thread and a method call must be performed on the main thread in order to send it data. The auxiliary method then called the background render method and passed it the image which updated the background. This is how we finally managed to get the video feed displayed with puzzle pieces rendered on top. Unfortunately this broke the puzzle piece texture rendering which Ashley had implemented, but we decided to put that aside in order to work on rendering the puzzle pieces in the correct perspective.
+Each frame from the iPad's camera is stored in a CMSampleBuffer and a method operating in a separate thread is executed whenever that buffer is written to. Within that method the image was converted to an OpenCV matrix so that the pose estimation function could give us the rotation and translation vectors required to render the puzzle pieces in the correct perspective. %Might be worth taking out the mention o pose estimation here, talk about it later anyway.
+ After that the image was converted to a UIImage for compatibility with Ashley's code and an auxiliary method in the game logic code was called and sent the UIImage. This auxiliary method was necessary as the buffer method operates in a separate thread and a method call must be performed on the main thread in order to send it data. The auxiliary method then called the background render method and passed it the image which updated the background. This is how we finally managed to get the video feed displayed with puzzle pieces rendered on top. Unfortunately this broke the puzzle piece texture rendering which Ashley had implemented, but we decided to put that aside in order to work on rendering the puzzle pieces in the correct perspective.
 
 
-To render the puzzle pieces in the correct perspective we needed to make use of the rotation and translation vectors returned by the pose estimation algorithm. These vectors require no further processing for use in OpenCV functions but the puzzle pieces were being rendered with OpenGL. So we had to research how to render OpenGL graphics from a given perspective. I found an OpenCV forum post that detailed how to initialise an OpenGL Modelview Matrix using the rotation and translation vectors from OpenCV. I followed the method detailed in the post, which involved combining the vectors into a 4$\times$4 matrix and multiplying it in order to invert the y and z axes as OpenGL and OpenCV use different coordinate systems. I then transposed the matrix, as OpenGL and OpenCV matrices are ordered differently, and converted it to a matrix type used by the OpenGL functions. Following this we had to use another auxiliary function that would accept both the background image and ModelView Matrix sent from the separately threaded method. Ashley then used the ModelView Matrix to change the way OpenGL had been rendering the pieces which resulted in the pieces disappearing from view. We attemped to debug our method but after progress on the application stalled for too long we decided on another approach. 
+To render the puzzle pieces in the correct perspective we needed to make use of the rotation and translation vectors returned by the pose estimation algorithm. These vectors require no further processing for use in OpenCV functions but the puzzle pieces were being rendered with OpenGL. So we had to research how to render OpenGL graphics from a given perspective. %Perhaps mention what a model view matrix is
+ I found an OpenCV forum post that detailed how to initialise an OpenGL Modelview Matrix using the rotation and translation vectors from OpenCV. I followed the method detailed in the post, which involved combining the vectors into a 4$\times$4 matrix and multiplying it in order to invert the y and z axes as OpenGL and OpenCV use different coordinate systems. I then transposed the matrix, as OpenGL and OpenCV matrices are ordered differently, and converted it to a matrix type used by the OpenGL functions. Following this we had to use another auxiliary function that would accept both the background image and ModelView Matrix sent from the separately threaded method. Ashley then used the ModelView Matrix to change the way OpenGL had been rendering the pieces which resulted in the pieces disappearing from view. We attemped to debug our method but after progress on the application stalled for too long we decided on another approach. 
 
 
 I had previously used OpenCV in order to render simple geometry in perspective as a means of testing the pose estimation function. To do this, world space coordinates must be transformed into image space coordinates before being drawn on the background image. OpenCV provides such a function that accepts the previously calculated rotation and translation vectors as arguments along with a vector of world space coordinates and returns the corresponding image space coordinates. As our pieces are stored in world space we reasoned that we might be able to use this function to render simple quads for the pieces. From the documentation it seemed that OpenCV also supported texturing. 
 
 When exploring this option further we discovered that OpenCV has a function for calculating a perspective transformation between four pairs of vertices. This effectively returns a matrix that describes the transformation from one quad to another. Then you can use the openCV function warpPerspective to apply that transformation to a given image. So rather than render quads for the pieces and texturing them we decided to try transforming the textures directly and superimposing them on the background image in the correct position. 
 
-Our implementation of this works piece by piece and begins by creating 4 3-vectors that represents each vertex of the piece. These are the world space coordinates of the corners of each piece. Then we calculate the image space coordinates for each of the vertices so we know where on the screen to render the image. We then create a sub image from the image used to texture the puzzle, this sub image is the piece of the texture image that represents the piece. Following that we calculate the perspective transformation from the sub image to the image space coordinates for the piece. This operation basically maps a small piece of the full puzzle image to where the piece should be displayed on the board. After applying the perspective transformation to the sub image we are left with an image that is the same size as out background image but all of it is empty space besides the pixels that make up the sub image. We then superimpose this image onto the background and repeat for each piece. This whole operation is done every frame. 
+Our implementation of this works piece by piece and begins by creating 4 3-vectors that represent each vertex of the piece. These are the world space coordinates of the corners of each piece. Then we calculate the image space coordinates for each of the vertices so we know where on the screen to render the image. We then create a sub image from the image used to texture the puzzle, this sub image is the piece of the texture image that represents the piece. Following that we calculate the perspective transformation from the sub image to the image space coordinates for the piece. This operation basically maps a small piece of the full puzzle image to where the piece should be displayed on the board. After applying the perspective transformation to the sub image we are left with an image that is the same size as out background image but all of it is empty space besides the pixels that make up the sub image. We then superimpose this image onto the background and repeat for each piece. This whole operation is done every frame. 
 
 This is the currently implemented method of rendering the puzzle pieces in the correct perspective.
 
-%rvec and tvec to modelview failed, rendering with openCv and textures as perspective transformed subimages. Talk about perspective transformation error that resulted in incorrect piece positioning. 
-
-
-
 \section{Results}
-
-
 %Screenshots and talk about how the final version of the app operates. Its successes and failures
 
-\section{Discussion}
+Note to supervisors: I will include pictures of the application running in this section. I also don't know what else to say here.
 
+The application works as shown in our accompanying 
+
+Together we succeeded in building a working application. When the application is started and the iPad's camera is pointed at the checkerboard pattern the user is presented a view of the world obtained from the iPad's camera. The puzzle pieces are rendered on top of that view in the correct perspective, and by tapping a piece and then a place on the screen, the user can pick up and place the piece in a desired position. The pieces automatically snap together when in close enough proximity to a neighbouring piece and by doing this the puzzle is solvable. Also multiple players are able to work together to solve the puzzle. 
+
+In particular, the localisation works correctly although it is not yet fast enough to be practical. Currently the application runs at around five frames per second.
+
+Pictures to follow.
+
+\section{Discussion and Future Work}
 %Discuss those successes and failures and relate them back to aims and objectives. 
 
-\section{Limitations and Future Work}
+% Talk about using opencv and how average it was. 
 
 % How to correct failures mentioned in discussion
-
-My main objective is to finish porting the work I have done to iOS and to ensure it works correctly. I must figure out how to correctly display a processed camera frame to the iPad's screen and I must solve the variable focus camera calibration issue.
-
-Once the iOS porting is complete it will be time to integrate my part of the project with the game logic and rendering developed by Ash and the networking developed by Shahne. 
-
-Successfully integrating the three parts of the Giguesaur project will result in a completed working iPad application, but there is room for improvement in my part of the project. 
-
+\begin{comment}
 The main limitation of my current implementation of camera localisation is the use of the findChessboardCorners function to locate the relevant features in an image. This function is subject to the limitation that the whole chessboard pattern must be in view of the camera or none of the internal corners' image-space coordinates are given. Without those image-space coordinates the pose estimation algorithm cannot be executed and therefore the camera's location cannot be determined. This effectively limits the puzzle to being played on a tabletop without anyone obscuring the board from another player's iPad, which is at odds with our vision of how the game should be played.
 
-With that in mind my goal, once the basic application is complete, is to develop a marker tracking system that doesn't require that the whole marker (or all markers) be in view at one time, and if at all possible allow for a marker to be partially obscured without loss of camera location. There has been some research on the topic of partial marker occlusion \cite{occlusion} and I would like to be able to implement a similar system. 
-
+It would be nice to develop a marker tracking system that doesn't require that the whole marker (or all markers) be in view at one time, and if at all possible allow for a marker to be partially obscured without loss of camera location. There has been some research on the topic of partial marker occlusion \cite{occlusion} and I would like to be able to implement a similar system. 
+\end{comment}
 
 %----------------------------------------------------------------------------------------
-%	BIBLIOGRAPHY
+%	BIBLIOGRAPHY - Check references. 
 %----------------------------------------------------------------------------------------
 
 \bibliographystyle{ieeetr}
